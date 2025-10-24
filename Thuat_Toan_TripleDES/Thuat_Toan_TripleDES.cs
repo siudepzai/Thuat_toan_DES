@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Thuat_toan_DES
+namespace Thuat_Toan_TripleDES
 {
     internal class Thuat_Toan_DES
     {
@@ -262,29 +261,71 @@ namespace Thuat_toan_DES
             return _from_binary_list(decrypted_data);
         }
     }
+    internal class Thuat_Toan_TripleDES
+    {
+        private readonly Thuat_Toan_DES des1;
+        private readonly Thuat_Toan_DES des2;
+        private readonly Thuat_Toan_DES des3;
 
-        //class Program
-        //{
-        //    static void Main(string[] args)
-        //    {
-        //        Console.OutputEncoding = Encoding.UTF8;
+        public Action<string> LogAction; // ghi log ra GUI
 
-        //        Console.Write("Nhập khóa (8 ký tự): ");
-        //        var keyInput = Console.ReadLine();
-        //        if (keyInput.Length < 8) keyInput = keyInput.PadRight(8, '0');
+        public Thuat_Toan_TripleDES(byte[] key1, byte[] key2, byte[] key3, Action<string> logger = null)
+        {
+            if (key1.Length != 8 || key2.Length != 8 || key3.Length != 8)
+                throw new ArgumentException("Mỗi khóa DES phải có độ dài 8 byte.");
 
-        //        Console.Write("Nhập bản rõ (8 ký tự): ");
-        //        var plainInput = Console.ReadLine();
-        //        if (plainInput.Length < 8) plainInput = plainInput.PadRight(8, ' ');
+            des1 = new Thuat_Toan_DES(key1);
+            des2 = new Thuat_Toan_DES(key2);
+            des3 = new Thuat_Toan_DES(key3);
 
-        //        var key = Encoding.ASCII.GetBytes(keyInput);
-        //        var plain = Encoding.ASCII.GetBytes(plainInput);
+            // Nếu có truyền logger, gán cho từng DES
+            if (logger != null)
+            {
+                LogAction = logger;
+                des1.LogAction = (msg) => logger($"[DES1] {msg}");
+                des2.LogAction = (msg) => logger($"[DES2] {msg}");
+                des3.LogAction = (msg) => logger($"[DES3] {msg}");
+            }
+        }
+        public byte[] EncryptBlock(byte[] plainBlock)
+        {
+            if (plainBlock.Length != 8)
+                throw new ArgumentException("Khối đầu vào phải dài 8 byte.");
 
-        //        var Thuat_Toan_DES = new Thuat_Toan_DES(key);
-        //        var encrypted = Thuat_Toan_DES.Encrypt(plain);
+            LogAction?.Invoke("\n--- Bắt đầu Triple DES MÃ HÓA ---");
+            LogAction?.Invoke("[B1] DES1: Mã hóa");
+            byte[] step1 = des1.encrypt_block(plainBlock);
 
-        //        Console.WriteLine($"\nBản rõ: {BitConverter.ToString(plain).Replace("-", "")}");
-        //        Console.WriteLine($"Bản mã: {BitConverter.ToString(encrypted).Replace("-", "")}");
-        //    }
-        //}
+            LogAction?.Invoke("[B2] DES2: Giải mã");
+            byte[] step2 = des2.decrypted_block(step1);
+
+            LogAction?.Invoke("[B3] DES3: Mã hóa");
+            byte[] ciphertext = des3.encrypt_block(step2);
+
+            LogAction?.Invoke("--- Kết thúc Triple DES MÃ HÓA ---\n");
+            return ciphertext;
+        }
+
+        public byte[] DecryptBlock(byte[] cipherBlock)
+        {
+            if (cipherBlock.Length != 8)
+                throw new ArgumentException("Khối đầu vào phải dài 8 byte.");
+
+            LogAction?.Invoke("\n--- Bắt đầu Triple DES GIẢI MÃ ---");
+            LogAction?.Invoke("[B1] DES3: Giải mã");
+            byte[] step1 = des3.decrypted_block(cipherBlock);
+
+            LogAction?.Invoke("[B2] DES2: Mã hóa");
+            byte[] step2 = des2.encrypt_block(step1);
+
+            LogAction?.Invoke("[B3] DES1: Giải mã");
+            byte[] plainBlock = des1.decrypted_block(step2);
+
+            LogAction?.Invoke("--- Kết thúc Triple DES GIẢI MÃ ---\n");
+            return plainBlock;
+        }
+
     }
+}
+
+
