@@ -45,10 +45,11 @@
             // 
             // label1
             // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(411, 19);
+            this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(293, 55);
+            this.label1.Size = new System.Drawing.Size(1100, 55);
             this.label1.TabIndex = 7;
             this.label1.Text = "Thuật toán DES";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -98,6 +99,7 @@
             this.txt_cipher.Multiline = true;
             this.txt_cipher.Name = "txt_cipher";
             this.txt_cipher.ReadOnly = true;
+            this.txt_cipher.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txt_cipher.Size = new System.Drawing.Size(485, 39);
             this.txt_cipher.TabIndex = 3;
             // 
@@ -107,6 +109,7 @@
             this.txt_plaint.Multiline = true;
             this.txt_plaint.Name = "txt_plaint";
             this.txt_plaint.ReadOnly = true;
+            this.txt_plaint.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txt_plaint.Size = new System.Drawing.Size(485, 39);
             this.txt_plaint.TabIndex = 4;
             // 
@@ -187,6 +190,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "GUI_DES";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Giao diện thuật toán DES";
             this.ResumeLayout(false);
             this.PerformLayout();
