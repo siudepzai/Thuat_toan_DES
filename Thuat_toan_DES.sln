@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thuat_toan_DES", "Thuat_toan_DES.csproj", "{171C4F7A-3510-471B-9DA6-0559AE1CEF13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thuat_Toan_TripleDES", "..\Thuat_Toan_TripleDES\Thuat_Toan_TripleDES.csproj", "{80415A2A-6CAD-4A9D-BD00-2EBFDB363B5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thuat_Toan_TripleDES", "Thuat_Toan_TripleDES\Thuat_Toan_TripleDES.csproj", "{80415A2A-6CAD-4A9D-BD00-2EBFDB363B5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
