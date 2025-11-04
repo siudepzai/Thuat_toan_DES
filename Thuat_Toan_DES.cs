@@ -229,6 +229,7 @@ namespace Thuat_toan_DES
                 var ciphertext_F = _permute(combined, FP);
                 var ciphertext_TV = _from_binary_list(ciphertext_F);
                 LogAction?.Invoke($"Dữ liệu mã hóa tại vòng {i + 1}: {BitConverter.ToString(ciphertext_TV).Replace("-", "")}");
+                
             }
 
             var final_combined = right.Concat(left).ToList();

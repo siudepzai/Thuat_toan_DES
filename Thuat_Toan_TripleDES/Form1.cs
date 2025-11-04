@@ -28,12 +28,18 @@ namespace Thuat_Toan_TripleDES
         {
             if (string.IsNullOrEmpty(keyText))
                 throw new ArgumentException($"Vui lòng nhập {keyName}!");
+            if (keyText.Any(ch => ch > 127))
+            
+                throw new ArgumentException($"{keyName} chỉ được phép chứa ký tự không dấu (ASCII)!");
 
-            // Khóa DES phải là 8 byte. Cắt hoặc thêm padding '0'
-            if (keyText.Length > 8)
+
+            
+
+            // Khóa DES phải là 8 byte. Cắt hoặc thêm padding '0'
+            if (keyText.Length > 8)
                 keyText = keyText.Substring(0, 8);
             else if (keyText.Length < 8)
-                keyText = keyText.PadRight(8, ' ');
+                keyText = keyText.PadRight(8, '0');
 
             return Encoding.ASCII.GetBytes(keyText);
         }
@@ -100,7 +106,7 @@ namespace Thuat_Toan_TripleDES
                 byte[] key1 = PrepareKey(txt_Key_1.Text, "Khóa 1");
                 byte[] key2 = PrepareKey(txt_Key_2.Text, "Khóa 2");
                 byte[] key3 = PrepareKey(txt_Key_3.Text, "Khóa 3");
-
+               
                 // 2. Khởi tọa thuật toán Triple DES
                 Thuat_Toan_TripleDES tripleDES = new Thuat_Toan_TripleDES(
     key1, key2, key3,
@@ -108,7 +114,7 @@ namespace Thuat_Toan_TripleDES
 );
 
                 // 3. Chuyển dữ liệu bản rõ thành mảng byte và thêm padding nếu cần
-                byte[] plainBytes = Encoding.ASCII.GetBytes(plainText);
+                byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
                 byte[] paddedData = PadData(plainBytes);
 
                 // 4. Mã hóa từng khối 8 byte và lưu trữ kết quả
@@ -183,8 +189,8 @@ namespace Thuat_Toan_TripleDES
                 // 5. Xóa dấu cách trong dữ liệu đã giải mã
                 byte[] unpaddedBytes = UnpadData(decryptedAll);
 
-                // 6. Chuyển đổi mảng byte thành chuỗi và hiển thị theo mã ASCII
-                string plainOut = Encoding.ASCII.GetString(unpaddedBytes);
+                // 6. Chuyển đổi mảng byte thành chuỗi và hiển thị theo mã UTF8
+                string plainOut = Encoding.UTF8.GetString(unpaddedBytes);
                 txt_plaint.Text = plainOut;
             }
             catch (ArgumentException ex)

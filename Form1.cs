@@ -35,6 +35,11 @@ namespace Thuat_toan_DES
                 MessageBox.Show("Vui lòng nhập khóa!");
                 return;
             }
+            if (keyText.Any(ch => ch > 127))
+            {
+                MessageBox.Show("Khóa chỉ được phép chứa ký tự không dấu (ASCII)!");
+                return;
+            }
 
             // Khóa 8 byte
             if (keyText.Length > 8)
@@ -52,7 +57,7 @@ namespace Thuat_toan_DES
                 }));
             };
 
-            byte[] plainBytes = Encoding.ASCII.GetBytes(plainText);
+            byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
 
             // --- Thêm PKCS#7 padding ---
             int padLen = 8 - (plainBytes.Length % 8);
@@ -100,7 +105,7 @@ namespace Thuat_toan_DES
             else if (keyText.Length < 8)
                 keyText = keyText.PadRight(8, '0');
 
-            byte[] keyBytes = Encoding.ASCII.GetBytes(keyText);
+            byte[] keyBytes = Encoding.UTF8.GetBytes(keyText);
             Thuat_Toan_DES des = new Thuat_Toan_DES(keyBytes);
             des.LogAction = msg =>
             {
@@ -130,7 +135,7 @@ namespace Thuat_toan_DES
             if (padVal > 0 && padVal <= 8)
                 decryptedAll.RemoveRange(decryptedAll.Count - padVal, padVal);
 
-            string plainOut = Encoding.ASCII.GetString(decryptedAll.ToArray());
+            string plainOut = Encoding.UTF8.GetString(decryptedAll.ToArray());
             txt_plaint.Text = plainOut;
 
         }
